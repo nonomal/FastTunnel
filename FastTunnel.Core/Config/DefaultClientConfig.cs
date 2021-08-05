@@ -13,5 +13,7 @@ namespace FastTunnel.Core.Config
         public IEnumerable<WebConfig> Webs { get; set; }
 
         public IEnumerable<SSHConfig> SSH { get; set; }
+
+        public string Token { get; set; }
     }
 }

@@ -5,12 +5,12 @@
 ## FastTunnel-内网穿透
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Build status](https://github.com/anjoy8/blog.core/workflows/.NET%20Core/badge.svg)](https://github.com/SpringHgui/FastTunnel/actions)
+[![Build status](https://github.com/anjoy8/blog.core/workflows/.NET%20Core/badge.svg)](https://github.com/FastTunnel/FastTunnel/actions)
 [![Nuget](https://img.shields.io/nuget/v/FastTunnel.Core)](https://www.nuget.org/packages/FastTunnel.Core/)
 [![Nuget](https://img.shields.io/nuget/dt/FastTunnel.Core)](https://www.nuget.org/packages/FastTunnel.Core/)
 
-[README](README.md) | [中文文档](README_zh.md)
-    
+[README](README.md) | [中文文档](README_zh.md) | [原理和使用教程整理](/docs/blogs.md)  
+
 **本项目支持任何商用和二次开发行为，但对于剽窃复制本项目代码、实现方案或架构重新开源包装成自己的开源作品，严重鄙视。**
 
 </div>
@@ -23,7 +23,7 @@
 - 你可以通过引用`FastTunnel.Core`的nuget包构建出自己的穿透应用，并针自己所需的业务扩展功能。
 
 ### 开源仓库地址
-GitHub : [FastTunnel](https://github.com/SpringHgui/FastTunnel)  
+GitHub : [FastTunnel](https://github.com/FastTunnel/FastTunnel)  
 Gitee: [FastTunnel](https://gitee.com/Hgui/FastTunnel)
 
 **有帮助的朋友点下右上角项目的⭐Star支持一下本项目，有需求和bug请提交issue，同时欢迎各位coder进行PR**
@@ -72,10 +72,6 @@ docker run --detach \
 `./FastTunnel.Client`
 #### Mac
 直接运行 `FastTunnel.Client`
-
-## 相关高质量博客
-
-[原理和教程](/docs/blogs.md)  
 
 ## 配置示例
 ### 1. 用自定义域名访问内网web服务
