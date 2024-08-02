@@ -18,6 +18,7 @@
 # Sponsor
 If `FastTunel` gives you value, might as well ☕ [sponsor a cup of coffee](https://afdian.net/a/gui_h/plan)~。  
 
+new open-source task scheduling system, welcome to learn more about [OpenTask](https://github.com/SpringHgui/OpenTask)
 ---
 </div>
 
