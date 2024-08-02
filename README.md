@@ -12,15 +12,16 @@
 
 </div>
 
----
+
 <div align="center">
 
 # Sponsor
 If `FastTunel` gives you value, might as well ☕ [sponsor a cup of coffee](https://afdian.net/a/gui_h/plan)~。  
 
-new open-source task scheduling system, welcome to learn more about [OpenTask](https://github.com/SpringHgui/OpenTask)
----
+## new open-source task scheduling system, welcome to learn more about [OpenTask](https://github.com/SpringHgui/OpenTask)
+
 </div>
+
 
 ## What is FastTunnel？
 - FastTunnel is a high-performance cross-platform intranet penetration tool. With it, you can expose intranet services to the public network for yourself or anyone to access.
