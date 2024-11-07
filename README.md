@@ -28,12 +28,6 @@ If `FastTunel` gives you value, might as well ☕ [sponsor a cup of coffee](http
 - Unlike other penetration tools, the FastTunnel project is committed to creating an easy-to-extensible and easy-to-maintain intranet penetration framework.
 - You can build your own penetration application by referencing the nuget package of `FastTunnel.Core`, and target the business extension functions you need.
 
-## Docs
-[https://docs.suidao.io](https://docs.suidao.io)
- 
-## Enjoy Now
-Official website : https://suidao.io  
-
 The penetration platform developed based on this framework, if you need intranet penetration, you can register and use it directly, eliminating the cost of building and maintaining yourself.
 But do not use this service for important items.
 
