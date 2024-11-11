@@ -11,8 +11,6 @@
 [README](README.md) | [中文介绍](README_zh.md)  
 
 </div>
-
-
 <div align="center">
 
 # Sponsor
@@ -30,6 +28,10 @@ If `FastTunel` gives you value, might as well ☕ [sponsor a cup of coffee](http
 
 The penetration platform developed based on this framework, if you need intranet penetration, you can register and use it directly, eliminating the cost of building and maintaining yourself.
 But do not use this service for important items.
+
+
+## Docs
+[Docs](https://docs.opentask.run/docs/fasttunel/getting-started)
 
 ## Repositories
 
