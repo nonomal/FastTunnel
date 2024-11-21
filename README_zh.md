@@ -16,7 +16,7 @@
 <div align="center">
 
 # 赞助作者
-如果`FastTunel`给你带去了价值，不妨☕ [赞助一杯咖啡](https://afdian.net/a/gui_h/plan)~。  
+如果`FastTunel`给你带去了价值，不妨☕ [赞助一杯咖啡](https://afdian.com/a/gui_h/plan)~。  
 
 
 ## 作者新开源了一个任务调度系统，欢迎了解关注[OpenTask](https://github.com/SpringHgui/OpenTask)
