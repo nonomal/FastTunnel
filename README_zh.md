@@ -13,30 +13,33 @@
 
 </div>
 
-***
+<div align="center">
+
+# 赞助作者
+如果`FastTunel`给你带去了价值，不妨☕ [赞助一杯咖啡](https://afdian.com/a/gui_h/plan)~。  
+
+
+## 作者新开源了一个任务调度系统，欢迎了解关注[OpenTask](https://github.com/SpringHgui/OpenTask)
+</div>
+
 
 ## FastTunnel
 高性能跨平台内网穿透工具，使用它可以实现将内网服务暴露到公网供自己或任何人访问。
 - 与其他穿透工具不同的是，FastTunnel项目致力于打造一个易于扩展、易于维护的内网穿透框架。
 - 你可以通过引用`FastTunnel.Core`的nuget包构建出自己的穿透应用，并针自己所需的业务扩展功能。
 
+**使用内网穿透暴露3389端口的，一定要注意，电脑的密码一定要设置复杂一点，避免被黑客破解计算机登录密码，造成损失。**   
+**使用内网穿透暴露3389端口的，一定要注意，电脑的密码一定要设置复杂一点，避免被黑客破解计算机登录密码，造成损失。**   
+**使用内网穿透暴露3389端口的，一定要注意，电脑的密码一定要设置复杂一点，避免被黑客破解计算机登录密码，造成损失。**   
+
 ## 文档
-[https://docs.suidao.io](https://docs.suidao.io)
-
-**使用内网穿透暴露3389端口的，一定要注意，电脑的密码一定要设置复杂一点，避免被黑客破解计算机登录密码，造成损失。**   
-**使用内网穿透暴露3389端口的，一定要注意，电脑的密码一定要设置复杂一点，避免被黑客破解计算机登录密码，造成损失。**   
-**使用内网穿透暴露3389端口的，一定要注意，电脑的密码一定要设置复杂一点，避免被黑客破解计算机登录密码，造成损失。**   
- 
-## 立即体验内网穿透
-官网：https://suidao.io  
-
-此网站基于本框架开发的穿透平台，用于分享测试使用，如果你需要低频使用内网穿透可以直接注册使用，免去自己搭建和维护的成本；但生产项目请勿使用此服务。
+[文档](https://docs.opentask.run/docs/fasttunel/getting-started)
 
 ## 开源仓库地址
 [GitHub](https://github.com/SpringHgui/FastTunnel)  
 [Gitee](https://gitee.com/Hgui/FastTunnel)
 
-**有帮助的朋友点下右上角项目的⭐Star支持一下本项目，有需求和bug请提交issue，同时欢迎各位coder进行PR**
+**有帮助的朋友点下右上角项目的⭐Star支持一下本项目，本项开发进度需要社区的推动，无论是提交issue还是pr，亦或是完善文档，如果您想加入FastTunnel组织请发邮件给我！**
 
 ## GVP最有价值开源项目
 
@@ -55,13 +58,6 @@
 <a href = "https://github.com/FastTunnel/FastTunnel/graphs/contributors">
   <img src = "https://contrib.rocks/image?repo=FastTunnel/FastTunnel"/>
 </a>  
-
-## 赞助作者
-
-<div align="center">
-  <img src="images/wxpay.jpg" height="250" align=center />
-  <img src="images/alipay.jpg" height="250" align=center />
-</div>
 
 ## QQ群交流群
 加群交流FastTunnel相关的使用问题、bug、需求等

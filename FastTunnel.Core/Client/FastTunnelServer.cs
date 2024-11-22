@@ -1,4 +1,4 @@
-﻿// Licensed under the Apache License, Version 2.0 (the "License").
+// Licensed under the Apache License, Version 2.0 (the "License").
 // You may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //     https://github.com/FastTunnel/FastTunnel/edit/v2/LICENSE
@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using System.IO;
 using Yarp.ReverseProxy.Configuration;
 using System.Collections.Generic;
+using FastTunnel.Core.Forwarder.MiddleWare;
 
 namespace FastTunnel.Core.Client
 {
@@ -25,7 +26,7 @@ namespace FastTunnel.Core.Client
         public IProxyConfigProvider proxyConfig;
         readonly ILogger<FastTunnelServer> logger;
 
-        public ConcurrentDictionary<string, TaskCompletionSource<Stream>> ResponseTasks { get; } = new();
+        public ConcurrentDictionary<string, (TaskCompletionSource<Stream>, CancellationToken)> ResponseTasks { get; } = new();
 
         public ConcurrentDictionary<string, WebInfo> WebList { get; private set; } = new();
 
@@ -48,10 +49,10 @@ namespace FastTunnel.Core.Client
         /// 客户端登录
         /// </summary>
         /// <param name="client"></param>
-        internal void OnClientLogin(TunnelClient client)
+        internal void ClientLogin(TunnelClient client)
         {
             Interlocked.Increment(ref ConnectedClientCount);
-            logger.LogInformation($"客户端连接 {client.RemoteIpAddress} 当前在线数：{ConnectedClientCount}");
+            logger.LogInformation($"客户端连接 {client.RemoteIpAddress} 当前在线数：{ConnectedClientCount}，统计CLIENT连接数：{FastTunnelClientHandler.ConnectionCount}");
             Clients.Add(client);
         }
 
@@ -60,10 +61,10 @@ namespace FastTunnel.Core.Client
         /// </summary>
         /// <param name="client"></param>
         /// <exception cref="NotImplementedException"></exception>
-        internal void OnClientLogout(TunnelClient client)
+        internal void ClientLogout(TunnelClient client)
         {
             Interlocked.Decrement(ref ConnectedClientCount);
-            logger.LogInformation($"客户端关闭  {client.RemoteIpAddress} 当前在线数：{ConnectedClientCount}");
+            logger.LogInformation($"客户端关闭  {client.RemoteIpAddress} 当前在线数：{ConnectedClientCount}，统计CLIENT连接数：{FastTunnelClientHandler.ConnectionCount - 1}");
             Clients.Remove(client);
             client.Logout();
         }

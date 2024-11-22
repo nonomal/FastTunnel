@@ -4,7 +4,8 @@
 //     https://github.com/FastTunnel/FastTunnel/edit/v2/LICENSE
 // Copyright (c) 2019 Gui.H
 
-using FastTunnel.Core.Dispatchers;
+using FastTunnel.Core.Handlers;
+using FastTunnel.Core.Handlers.Server;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
@@ -55,38 +56,42 @@ namespace FastTunnel.Core.Listener
 
         private void StartAccept(SocketAsyncEventArgs acceptEventArg)
         {
-            _logerr.LogDebug($"【{ListenIp}:{ListenPort}】: StartAccept");
-            if (acceptEventArg == null)
+            try
             {
-                acceptEventArg = new SocketAsyncEventArgs();
-                acceptEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(AcceptEventArg_Completed);
-            }
-            else
-            {
-                // socket must be cleared since the context object is being reused
-                acceptEventArg.AcceptSocket = null;
-            }
+                _logerr.LogDebug($"【{ListenIp}:{ListenPort}】: StartAccept");
+                if (acceptEventArg == null)
+                {
+                    acceptEventArg = new SocketAsyncEventArgs();
+                    acceptEventArg.Completed += new EventHandler<SocketAsyncEventArgs>(AcceptEventArg_Completed);
+                }
+                else
+                {
+                    // socket must be cleared since the context object is being reused
+                    acceptEventArg.AcceptSocket = null;
+                }
 
-            bool willRaiseEvent = listenSocket.AcceptAsync(acceptEventArg);
-            if (!willRaiseEvent)
+                bool willRaiseEvent = listenSocket.AcceptAsync(acceptEventArg);
+                if (!willRaiseEvent)
+                {
+                    ProcessAcceptAsync(acceptEventArg);
+                }
+            }
+            catch (Exception ex)
             {
-                ProcessAcceptAsync(acceptEventArg);
+                _logerr.LogError(ex, "待处理异常");
             }
         }
 
-        private void ProcessAcceptAsync(SocketAsyncEventArgs e)
+        private async void ProcessAcceptAsync(SocketAsyncEventArgs e)
         {
             if (e.SocketError == SocketError.Success)
             {
                 var accept = e.AcceptSocket;
 
-                Interlocked.Increment(ref m_numConnectedSockets);
-
-                _logerr.LogInformation($"【{ListenIp}:{ListenPort}】Accepted. There are {{0}} clients connected to the port",
-                    m_numConnectedSockets);
+                IncrementClients();
 
                 // 将此客户端交由Dispatcher进行管理
-                _requestDispatcher.DispatchAsync(accept, client);
+                _requestDispatcher.DispatchAsync(accept, client, this);
 
                 // Accept the next connection request
                 StartAccept(e);
@@ -122,6 +127,20 @@ namespace FastTunnel.Core.Listener
                 shutdown = true;
                 listenSocket.Close();
             }
+        }
+
+        internal void IncrementClients()
+        {
+            Interlocked.Increment(ref m_numConnectedSockets);
+            _logerr.LogInformation($"[Listener:{ListenPort}] Accepted. There are {{0}} clients connected", m_numConnectedSockets);
+
+        }
+
+        internal void DecrementClients()
+        {
+            Interlocked.Decrement(ref m_numConnectedSockets);
+            _logerr.LogInformation($"[Listener:{ListenPort}] DisConnet. There are {{0}} clients connecting", m_numConnectedSockets);
+
         }
     }
 }

@@ -7,9 +7,12 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using Microsoft.AspNetCore.Builder;
-using FastTunnel.Core;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using FastTunnel.Core.Client.Extensions;
+using Serilog.Events;
+using Microsoft.Extensions.DependencyInjection;
+using FastTunnel.Core.Config;
 
 namespace FastTunnel.Client;
 
@@ -17,33 +20,37 @@ class Program
 {
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console().WriteTo.File("Logs/log-.log", rollingInterval: RollingInterval.Day)
+            .CreateBootstrapLogger();
+
         try
         {
             CreateHostBuilder(args).Build().Run();
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Log.Fatal(ex, "致命异常");
+            throw;
         }
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+            .UseSerilog((context, services, loggerConfiguration) =>
+            {
+                loggerConfiguration.ReadFrom.Configuration(context.Configuration)
+                  .ReadFrom.Services(services)
+                  .Enrich.FromLogContext()
+                  .WriteTo.Console();
+            })
             .UseWindowsService()
             .ConfigureServices((hostContext, services) =>
             {
-                    // -------------------FastTunnel START------------------
-                    services.AddFastTunnelClient(hostContext.Configuration.GetSection("ClientSettings"));
-                    // -------------------FastTunnel EDN--------------------
-                })
-            .ConfigureLogging((HostBuilderContext context, ILoggingBuilder logging) =>
-            {
-                var enableFileLog = (bool)(context.Configuration.GetSection("EnableFileLog")?.Get(typeof(bool)) ?? false);
-                if (enableFileLog)
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Trace);
-                    logging.AddLog4Net();
-                }
+                // -------------------FastTunnel START------------------
+                services.AddFastTunnelClient(hostContext.Configuration.GetSection("FastTunnel"));
+                // -------------------FastTunnel EDN--------------------
             });
 }

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019-2022 Gui.H. https://github.com/FastTunnel/FastTunnel
+// Copyright (c) 2019-2022 Gui.H. https://github.com/FastTunnel/FastTunnel
 // The FastTunnel licenses this file to you under the Apache License Version 2.0.
 // For more details,You may obtain License file at: https://github.com/FastTunnel/FastTunnel/blob/v2/LICENSE
 
@@ -7,13 +7,15 @@ using FastTunnel.Core.Extensions;
 using FastTunnel.Core.Handlers.Server;
 using FastTunnel.Core.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FastTunnel.Core.MiddleWares
+namespace FastTunnel.Core.Forwarder.MiddleWare
 {
     public class FastTunnelClientHandler
     {
@@ -21,6 +23,10 @@ namespace FastTunnel.Core.MiddleWares
         readonly FastTunnelServer fastTunnelServer;
         readonly Version serverVersion;
         readonly ILoginHandler loginHandler;
+
+        static int connectionCount;
+
+        public static int ConnectionCount => connectionCount;
 
         public FastTunnelClientHandler(
             ILogger<FastTunnelClientHandler> logger, FastTunnelServer fastTunnelServer, ILoginHandler loginHandler)
@@ -42,7 +48,16 @@ namespace FastTunnel.Core.MiddleWares
                     return;
                 };
 
-                await handleClient(context, version);
+                Interlocked.Increment(ref connectionCount);
+
+                try
+                {
+                    await handleClient(context, version);
+                }
+                finally
+                {
+                    Interlocked.Decrement(ref connectionCount);
+                }
             }
             catch (Exception ex)
             {
@@ -66,19 +81,23 @@ namespace FastTunnel.Core.MiddleWares
                 return;
             }
 
-            var client = new TunnelClient(webSocket, fastTunnelServer, loginHandler, context.Connection.RemoteIpAddress);
+            var loggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
+            var log = loggerFactory.CreateLogger<TunnelClient>();
+            var client = new TunnelClient(webSocket, fastTunnelServer, loginHandler, context.Connection.RemoteIpAddress, log);
             client.ConnectionPort = context.Connection.LocalPort;
 
             try
             {
-                fastTunnelServer.OnClientLogin(client);
-                await client.ReviceAsync(CancellationToken.None);
-
-                fastTunnelServer.OnClientLogout(client);
+                fastTunnelServer.ClientLogin(client);
+                await client.ReviceAsync(context.RequestAborted);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                fastTunnelServer.OnClientLogout(client);
+                logger.LogError(ex, "客户端异常");
+            }
+            finally
+            {
+                fastTunnelServer.ClientLogout(client);
             }
         }
 
@@ -91,7 +110,7 @@ namespace FastTunnel.Core.MiddleWares
 
         private bool checkToken(HttpContext context)
         {
-            bool checkToken = false;
+            var checkToken = false;
             if (fastTunnelServer.ServerOption.CurrentValue.Tokens != null && fastTunnelServer.ServerOption.CurrentValue.Tokens.Count != 0)
             {
                 checkToken = true;
